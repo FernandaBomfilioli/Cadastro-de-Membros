@@ -5,7 +5,7 @@ const app = express();
 app.use(express.json()); // Permite trabalhar com JSON no corpo da requisição
 app.use(express.static('public')); // Serve o front-end na pasta "public"
 
-const PORT = 3001;
+const PORT = 3002;
 
 // Rota para cadastrar membros
 app.post('/membros', async (req, res) => {

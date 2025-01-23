@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Membros</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #4CAF50;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #eafaf1;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lista de Membros</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>Data de Nascimento</th>
+                <th>Endereço</th>
+            </tr>
+        </thead>
+        <tbody id="membrosTableBody">
+        </tbody>
+    </table>
+
+    <a href="index.html">Voltar ao Cadastro</a>
+
+    <script>
+        const membrosTableBody = document.getElementById('membrosTableBody');
+
+        async function listarMembros() {
+            try {
+                const response = await fetch('/membros');
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar a lista de membros');
+                }
+
+                const membros = await response.json();
+                membrosTableBody.innerHTML = ''; // Limpa a tabela antes de preenchê-la
+                
+                membros.forEach((membro) => {
+                    const row = document.createElement('tr');
+                    
+                    // Formatar a data no formato "dd-mm-aaaa"
+                    const dataNascimento = new Date(membro.data_nascimento);
+                    const dataFormatada = dataNascimento.toLocaleDateString('pt-BR', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    });
+
+                    row.innerHTML = `
+                        <td>${membro.nome}</td>
+                        <td>${membro.telefone}</td>
+                        <td>${dataFormatada}</td>
+                        <td>${membro.endereco}</td>
+                    `;
+                    membrosTableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error(error);
+                membrosTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: red;">
+                            Erro ao carregar a lista de membros.
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        listarMembros();
+    </script>
+</body>
+</html>

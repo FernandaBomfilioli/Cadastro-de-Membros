@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Membros</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-size: 14px;
+            color: #555;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cadastro de Membros</h1>
+    <form id="cadastroForm">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" required>
+    
+        <label for="data_nascimento">Data de Nascimento:</label>
+        <input type="date" id="data_nascimento" required>
+    
+        <label for="telefone">Telefone:</label>
+        <input type="text" id="telefone" required>
+    
+        <label for="endereco">Endereço:</label>
+        <textarea id="endereco" rows="3" required></textarea>
+    
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <p>
+        <a href="listar.html">Clique aqui para ver a lista de membros</a>
+    </p>
+
+    <script>
+        const form = document.getElementById('cadastroForm');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const nome = document.getElementById('nome').value.trim();
+            const data_nascimento = document.getElementById('data_nascimento').value;
+            const telefone = document.getElementById('telefone').value.trim();
+            const endereco = document.getElementById('endereco').value.trim();
+
+            try {
+                const response = await fetch('/membros', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome, data_nascimento, telefone, endereco })
+                });
+
+                if (response.ok) {
+                    alert('Membro cadastrado com sucesso!');
+                    form.reset();
+                } else {
+                    alert('Erro ao cadastrar membro.');
+                }
+            } catch (error) {
+                alert('Erro ao se conectar ao servidor.');
+            }
+        });
+    </script>
+</body>
+</html>
